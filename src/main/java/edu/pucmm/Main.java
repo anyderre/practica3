@@ -4,9 +4,14 @@ import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Class.forName;
 import static spark.Spark.*;
 import static spark.route.HttpMethod.*;
 
