@@ -33,14 +33,40 @@ public class BootStrapServices {
      * @throws SQLException
      */
     public static void crearTablas() throws  SQLException{
-        String sql = "CREATE TABLE IF NOT EXISTS ESTUDIANTE\n" +
+        String sql = "CREATE TABLE IF NOT EXISTS ARTICULO\n" +
                 "(\n" +
-                "  MATRICULA INTEGER PRIMARY KEY NOT NULL,\n" +
-                "  NOMBRE VARCHAR(100) NOT NULL,\n" +
-                "  APELLIDO VARCHAR(100) NOT NULL,\n" +
-                "  TELEFONO VARCHAR(25) NOT NULL,\n" +
-                "  CARRERA VARCHAR(50) NOT NULL\n" +
+                "  ID INTEGER PRIMARY KEY NOT NULL,\n" +
+                "  TITULO VARCHAR(100) NOT NULL,\n" +
+                "  CUERPO VARCHAR(100) NOT NULL,\n" +
+                "  AUTOR VARCHAR(25) NOT NULL,\n" +
+                "  FECHA VARCHAR(50) NOT NULL\n" +
                 ");";
+
+        String sql2 = "CREATE TABLE IF NOT EXISTS USUARIO\n" +
+                "(\n" +
+                "  USERNAME VARCHAR(100) NOT NULL,\n" +
+                "  NOMBRE VARCHAR(100) NOT NULL,\n" +
+                "  PASSWORD VARCHAR(25) NOT NULL,\n" +
+                "  ADMINISTRADOR  NOT NULL\n" +
+                ");";
+
+        String sql3 = "CREATE TABLE IF NOT EXISTS COMENTARIO\n" +
+                "(\n" +
+                "  ID INTEGER PRIMARY KEY NOT NULL,\n" +
+                "  COMENTARIO VARCHAR(100) NOT NULL,\n" +
+                "  ARTICULO VARCHAR(100) NOT NULL,\n" +
+                "  AUTOR VARCHAR(25) NOT NULL,\n" +
+                ");";
+
+        String sql4 = "CREATE TABLE IF NOT EXISTS ETIQUETA\n" +
+                "(\n" +
+                "  ID INTEGER PRIMARY KEY NOT NULL,\n" +
+                "  TITULO VARCHAR(100) NOT NULL,\n" +
+                "  CUERPO VARCHAR(100) NOT NULL,\n" +
+                "  AUTOR VARCHAR(25) NOT NULL,\n" +
+                "  FECHA VARCHAR(50) NOT NULL\n" +
+                ");";
+
         Connection con = DataBaseServices.getInstancia().getConexion();
         Statement statement = con.createStatement();
         statement.execute(sql);

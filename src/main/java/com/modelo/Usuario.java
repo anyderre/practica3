@@ -18,6 +18,9 @@ public class Usuario {
         this.autor = autor;
     }
 
+    public Usuario() {
+    }
+
     public String getUsername() {
         return username;
     }

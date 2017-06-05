@@ -20,6 +20,9 @@ public class Articulo {
         this.fecha = fecha;
     }
 
+    public Articulo() {
+    }
+
     public long getId() {
         return id;
     }
