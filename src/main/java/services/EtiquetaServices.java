@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class EtiquetaServices {
 
 
-    public List<Etiqueta> getAlletiquetas(){
+    public List<Etiqueta> getAllEtiquetas(){
         List<Etiqueta> etiquetas = new ArrayList<>();
         Connection connection = null;
         String query = "select * from etiqueta;";
@@ -53,7 +53,7 @@ public class EtiquetaServices {
 
         return etiquetas;
     }
-    public Etiqueta getEtiqueta(Long id){
+    public Etiqueta getEtiqueta(long id){
         Etiqueta etiqueta = null;
         String query = "select * from etiqueta where id=?;";
         ArticuloServices articuloServices = new ArticuloServices();
@@ -106,19 +106,18 @@ public class EtiquetaServices {
 
         return  ok;
     }
-    public boolean actualizarUsuario(Usuario usuario){
+    public boolean actualizarEtiqueta(Etiqueta etiqueta){
         boolean ok = false;
         Connection connection= null;
-        String query = "update usuario set username=?,nombre=?, password=?, administrador=?, autor=? WHERE username=?);";
+        String query = "update etiqueta set id=?,etiqueta=?, articulo=? WHERE id=?);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,usuario.getUsername());
-            preparedStatement.setString(2,usuario.getNombre());
-            preparedStatement.setString(3,usuario.getPassword());
-            preparedStatement.setBoolean(4,usuario.getAdministrador());
-            preparedStatement.setBoolean(5,usuario.getAutor());
+            preparedStatement.setLong(1,etiqueta.getId());
+            preparedStatement.setString(2,etiqueta.getEtiqueta());
+            preparedStatement.setLong(3,etiqueta.getArticulo().getId());
+
             //resolving where
-            preparedStatement.setString(6,usuario.getUsername());
+            preparedStatement.setLong(1,etiqueta.getId());
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;
@@ -135,16 +134,16 @@ public class EtiquetaServices {
 
         return  ok;
     }
-    public boolean borrarUsuario(Usuario usuario){
+    public boolean borrarEtiqueta(long id){
         boolean ok = false;
 
         Connection connection = null;
-        String query = "delete from estudiante where=username=?;";
+        String query = "delete from etiqueta where id=?;";
         connection = DataBaseServices.getInstancia().getConexion();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             //resolving where
-            preparedStatement.setString(1,usuario.getUsername());
+            preparedStatement.setLong(1,id);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;

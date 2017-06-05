@@ -47,7 +47,7 @@ public class ArticuloServices {
     }
 
 
-    public Articulo getArticulo(String articulo){
+    public Articulo getArticulo(Long articulo){
         UsuarioServices usuarioServices=new UsuarioServices();
         Articulo articulo1= null;
         String query = "select * from articulo where id=?;";
@@ -56,7 +56,7 @@ public class ArticuloServices {
         try {
 
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,articulo);
+            preparedStatement.setLong(1,articulo);
             ResultSet resultSet = preparedStatement.executeQuery();
             articulo1.setId(resultSet.getLong("id"));
             articulo1.setAutor(usuarioServices.getUsuario(resultSet.getString("username")));

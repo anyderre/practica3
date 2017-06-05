@@ -128,7 +128,7 @@ public class UsuarioServices {
 
         return  ok;
     }
-    public boolean borrarUsuario(Usuario usuario){
+    public boolean borrarUsuario(String usuario){
         boolean ok = false;
 
         Connection connection = null;
@@ -137,7 +137,7 @@ public class UsuarioServices {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             //resolving where
-            preparedStatement.setString(1,usuario.getUsername());
+            preparedStatement.setString(1,usuario);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;
