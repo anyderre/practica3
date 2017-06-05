@@ -12,6 +12,9 @@ public class ConnectionDB {
     private final String username="sa";
     private final String password="";
 
+    public ConnectionDB(){
+        RegistrarDriver();
+    }
 
     public Connection getConnection(){
         Connection connection= null;
@@ -30,8 +33,5 @@ public class ConnectionDB {
             e.printStackTrace();
         }
     }
-    public void pruebaConnection() throws SQLException{
-        Connection connection =getConnection();
-        System.out.println("Connected to the database...");
-    }
+
 }

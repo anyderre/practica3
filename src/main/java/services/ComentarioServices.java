@@ -21,30 +21,6 @@ public class ComentarioServices {
         Connection con=null;
 
 
-/*
-        private Usuario usuario(PreparedStatement preparedStatement,String autor){
-
-            Usuario usuario=null;
-            try {
-                usuario=new Usuario();
-
-                preparedStatement.setString(1,autor);
-                ResultSet rs = preparedStatement.executeQuery();
-                usuario.setUsername(rs.getString("username"));
-                usuario.setPassword(rs.getString("password"));
-                usuario.setAutor(rs.getBoolean("autor"));
-                usuario.setAdministrador(rs.getBoolean("administrador"));
-                usuario.setNombre(rs.getString("nombre"));
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return usuario;
-        }
-*/
-
-
-
     public List<Comentario> listaEstudiantes() {
         List<Comentario> lista = new ArrayList<>();
         Connection con = null; //objeto conexion.
@@ -64,10 +40,8 @@ public class ComentarioServices {
                 com.setId( rs.getLong("ID"));
                 com.setComentario(rs.getString("comentario"));
                 com.setArticulo(rs.getLong("articulo"));
-                com.setAutor();//Esperando la funcion de Pierre
-
-
-
+                UsuarioServices usuarioServices = new UsuarioServices();
+                com.setAutor(usuarioServices.getUsuario(rs.getString("username")));//Esperando la funcion de Pierre
 
                 lista.add(com);
             }
