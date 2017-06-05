@@ -29,7 +29,7 @@ public class ComentarioServices {
             String query = "select * from comentario;";
             String queryAutor="select * from Usuario where Usuario.username=?;";
             con = DataBaseServices.getInstancia().getConexion(); //referencia a la conexion.
-            //
+            UsuarioServices usuarioServices = new UsuarioServices();
             PreparedStatement prepareStatement = con.prepareStatement(query);
             PreparedStatement preparedStatement2=con.prepareStatement(queryAutor);
             ResultSet rs = prepareStatement.executeQuery();
@@ -40,9 +40,7 @@ public class ComentarioServices {
                 com.setId( rs.getLong("ID"));
                 com.setComentario(rs.getString("comentario"));
                 com.setArticulo(rs.getLong("articulo"));
-                UsuarioServices usuarioServices = new UsuarioServices();
                 com.setAutor(usuarioServices.getUsuario(rs.getString("username")));//Esperando la funcion de Pierre
-
                 lista.add(com);
             }
 

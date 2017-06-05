@@ -33,6 +33,7 @@ public class UsuarioServices {
                 usuario.setNombre(resultSet.getString("nombre"));
                 usuario.setPassword(resultSet.getString("password"));
                 usuario.setUsername(resultSet.getString("username"));
+                usuarios.add(usuario);
             }
             connection.close();
 
@@ -42,7 +43,6 @@ public class UsuarioServices {
 
         return usuarios;
     }
-
     public Usuario getUsuario(String username){
         Usuario usuario = null;
         String query = "select * from Usuario where username=?;";
@@ -53,23 +53,20 @@ public class UsuarioServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,username);
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()){
+            while (resultSet!=null) {
                 usuario.setUsername(resultSet.getString("username"));
                 usuario.setPassword(resultSet.getString("password"));
                 usuario.setNombre(resultSet.getString("nombre"));
                 usuario.setAutor(resultSet.getBoolean("autor"));
                 usuario.setAdministrador(resultSet.getBoolean("administrador"));
             }
-
-
         } catch (SQLException ex) {
-            Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -91,12 +88,12 @@ public class UsuarioServices {
                 ok=true;
             };
         } catch (SQLException ex) {
-            Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -120,12 +117,12 @@ public class UsuarioServices {
                 ok=true;
             };
         } catch (SQLException ex) {
-            Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -135,7 +132,7 @@ public class UsuarioServices {
         boolean ok = false;
 
         Connection connection = null;
-        String query = "delete from estudiante where=username=?;";
+        String query = "delete from usuario where username=?;";
         connection = DataBaseServices.getInstancia().getConexion();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -146,12 +143,12 @@ public class UsuarioServices {
                 ok=true;
             };
         } catch (SQLException ex) {
-            Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
                 connection.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return  ok;

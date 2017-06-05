@@ -36,7 +36,7 @@ public class BootStrapServices {
 
         String sql2= "CREATE TABLE  IF NOT EXISTS ARTICULO\n"+
                 "(\n"+
-                        "ID bigint PRIMARY KEY NOT NULL,\n"+
+                        "ID bigint AUTO_INCREMENT PRIMARY KEY NOT NULL,\n"+
                         "TITULO varchar(30) NOT NULL,\n"+
                         "CUERPO varchar(30),\n"+
                         "AUTOR varchar(40) NOT NULL,\n"+
@@ -46,8 +46,8 @@ public class BootStrapServices {
 
         String sql3="CREATE TABLE IF NOT EXISTS COMENTARIO\n" +
                 "(\n" +
-                "    ID bigint PRIMARY KEY NOT NULL,\n" +
-                "    COMENTARIO clob,\n" +
+                "    ID bigint AUTO_INCREMENT PRIMARY KEY NOT NULL,\n" +
+                "    COMENTARIO VARCHAR (100),\n" +
                 "    ARTICULO bigint NOT NULL,\n" +
                 "    AUTOR varchar(40) NOT NULL,\n" +
                 "    CONSTRAINT COMENTARIO_ARTICULO_ID_FK FOREIGN KEY (ARTICULO) REFERENCES ARTICULO (ID),\n" +
@@ -56,8 +56,8 @@ public class BootStrapServices {
 
         String sql4 ="CREATE TABLE IF NOT EXISTS ETIQUETA\n" +
                 "(\n" +
-                "    ID bigint DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_8DB18914_03E1_4A7C_A2D5_C879283305B8) AUTO_INCREMENT NOT NULL,\n" +
-                "    ETIQUETA clob,\n" +
+                "    ID bigint AUTO_INCREMENT NOT NULL,\n" +
+                "    ETIQUETA VARCHAR (100),\n" +
                 "    ARTICULO bigint NOT NULL,\n" +
                 "    CONSTRAINT ETIQUETA_ARTICULO_ID_FK FOREIGN KEY (ARTICULO) REFERENCES ARTICULO (ID)\n" +
                 ");\n" +
