@@ -64,7 +64,7 @@ public class ComentarioServices {
                 com.setId( rs.getLong("ID"));
                 com.setComentario(rs.getString("comentario"));
                 com.setArticulo(rs.getLong("articulo"));
-                com.setAutor(//Esperando la funcion de Pierre);
+                com.setAutor();//Esperando la funcion de Pierre
 
 
 
