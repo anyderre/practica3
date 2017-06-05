@@ -47,7 +47,7 @@ public class Comentario {
         return articulo;
     }
 
-    public void setArticulo(long articulo) {
+    public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }
 

@@ -18,7 +18,7 @@ public class UsuarioServices {
     public List<Usuario> listarUsuarios(){
         List<Usuario> usuarios = new ArrayList<>();
         Connection connection = null;
-        String query = "select * from usuarios;";
+        String query = "select * from usuario;";
 
         try {
 
@@ -42,6 +42,7 @@ public class UsuarioServices {
 
         return usuarios;
     }
+
     public Usuario getUsuario(String username){
         Usuario usuario = null;
         String query = "select * from Usuario where username=?;";
@@ -52,11 +53,15 @@ public class UsuarioServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,username);
             ResultSet resultSet = preparedStatement.executeQuery();
-            usuario.setUsername(resultSet.getString("username"));
-            usuario.setPassword(resultSet.getString("password"));
-            usuario.setNombre(resultSet.getString("nombre"));
-            usuario.setAutor(resultSet.getBoolean("autor"));
-            usuario.setAdministrador(resultSet.getBoolean("administrador"));
+
+            while (resultSet.next()){
+                usuario.setUsername(resultSet.getString("username"));
+                usuario.setPassword(resultSet.getString("password"));
+                usuario.setNombre(resultSet.getString("nombre"));
+                usuario.setAutor(resultSet.getBoolean("autor"));
+                usuario.setAdministrador(resultSet.getBoolean("administrador"));
+            }
+
 
         } catch (SQLException ex) {
             Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);

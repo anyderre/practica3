@@ -1,6 +1,7 @@
 package com.modelo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by anyderre on 04/06/17.
@@ -11,6 +12,8 @@ public class Articulo {
     private String cuerpo;
     private Usuario autor;
     private Date fecha;
+    private List<Comentario> comentarios;
+    private List<Etiqueta> etiquetas;
 
     public Articulo(long id, String titulo, String cuerpo, Usuario autor, Date fecha) {
         this.id = id;
