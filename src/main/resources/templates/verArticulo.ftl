@@ -61,5 +61,6 @@
         $('.borrar').click(function () {
            $(this).fadeIn('slow',0.9)
         });
+
     });
   </script>

@@ -26,10 +26,11 @@ public class UsuarioServices {
             //
             PreparedStatement preparedStatement =connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet!=null){
+            while (resultSet.next()){
                 Usuario usuario = new Usuario();
-                usuario.setAdministrador(resultSet.getBoolean("administrador"));
-                usuario.setAutor(resultSet.getBoolean("autor"));
+
+                usuario.setAdministrador(resultSet.getBoolean("ADMINISTRADOR"));
+                usuario.setAutor(resultSet.getBoolean("AUTOR"));
                 usuario.setNombre(resultSet.getString("nombre"));
                 usuario.setPassword(resultSet.getString("password"));
                 usuario.setUsername(resultSet.getString("username"));
@@ -43,9 +44,9 @@ public class UsuarioServices {
 
         return usuarios;
     }
-    public Usuario getUsuario(String username){
-        Usuario usuario = null;
-        String query = "select * from Usuario where username=?;";
+    public Usuario getUsuario(String username)throws NullPointerException{
+        Usuario usuario = new Usuario();
+        String query = "select * from USUARIO where username=?;";
 
         Connection connection = DataBaseServices.getInstancia().getConexion();
         try {
@@ -53,7 +54,7 @@ public class UsuarioServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,username);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet!=null) {
+            while (resultSet.next()) {
                 usuario.setUsername(resultSet.getString("username"));
                 usuario.setPassword(resultSet.getString("password"));
                 usuario.setNombre(resultSet.getString("nombre"));
@@ -77,7 +78,9 @@ public class UsuarioServices {
         boolean ok = false;
         Connection connection= null;
         String query = "insert into usuario (username,nombre, password, administrador, autor)values(?,?,?,?,?);";
+
         try {
+            connection= DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,usuario.getUsername());
             preparedStatement.setString(2,usuario.getNombre());
@@ -91,6 +94,7 @@ public class UsuarioServices {
             Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
+                assert connection != null;
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,6 +108,7 @@ public class UsuarioServices {
         Connection connection= null;
         String query = "update usuario set username=?,nombre=?, password=?, administrador=?, autor=? WHERE username=?);";
         try {
+            connection= DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,usuario.getUsername());
             preparedStatement.setString(2,usuario.getNombre());
@@ -120,6 +125,7 @@ public class UsuarioServices {
             Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             try {
+                assert connection != null;
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);

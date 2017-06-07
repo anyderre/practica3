@@ -3,10 +3,7 @@ package edu.pucmm;
 import com.modelo.*;
 import com.sun.org.apache.regexp.internal.RE;
 import freemarker.template.Configuration;
-import services.ArticuloServices;
-import services.ComentarioServices;
-import services.EtiquetaServices;
-import services.UsuarioServices;
+import services.*;
 import spark.ModelAndView;
 import spark.Session;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -24,7 +21,7 @@ import static spark.route.HttpMethod.*;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)throws SQLException {
 
         //Seteando el puerto en Heroku
         port(getHerokuAssignedPort());
@@ -33,9 +30,29 @@ public class Main {
         //indicando los recursos publicos.
         staticFiles.location("/publico");
 
+        //Starting database
+        BootStrapServices.startDb();
 
-        //Linea para agregar la pantalla de debug. En productivo se debe quitar.
-        //enableDebugScreen();
+        //Testing Connection
+        DataBaseServices.getInstancia().testConexion();
+
+        //Creating table if not exists
+        BootStrapServices.crearTablas();
+
+            //Adding admin user
+            UsuarioServices usuarioServices = new UsuarioServices();
+        usuarioServices.listarUsuarios();
+
+                Usuario insertar = new Usuario();
+                insertar.setAdministrador(true);
+                insertar.setAutor(true);
+                insertar.setNombre("Jhon Ridore");
+                insertar.setPassword("1234");
+                insertar.setUsername("anyderre");
+             if(usuarioServices.getUsuario("anyderre")==null){
+                usuarioServices.crearUsuario(insertar);
+            }
+
 
         //Indicando la carpeta por defecto que estaremos usando.
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
@@ -45,10 +62,12 @@ public class Main {
 
         get("/", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            Session session = request.session(true);
-            Usuario usuario = session.attribute("Usuario");
-            if(usuario==null){
-                response.redirect("/login");
+
+
+            ArticuloServices articuloServices = new ArticuloServices();
+
+            if(articuloServices.listarArticulos()!=null) {
+                attributes.put("articulos", articuloServices.listarArticulos());
             }
             attributes.put("titulo", "Welcome");
             return new ModelAndView(attributes, "index.ftl");
@@ -65,12 +84,22 @@ public class Main {
             Map<String, Object> attributes = new HashMap<>();
             //Usuario currentUserLogin = new Usuario();
             Session session = request.session(true);
-            Usuario usuario = session.attribute("Usuario");
-            if(usuario==null){
-                response.redirect("/login");
-            }
-            attributes.put("titulo", "Login");
-            return new ModelAndView(attributes, "index.ftl");
+            Usuario usuario = new Usuario();
+            String username = request.queryParams("username");
+            String password = request.queryParams("password");
+            usuario.setUsername(username);
+            usuario.setPassword(password);
+            UsuarioServices usuarioServices1 = new UsuarioServices();
+
+           if(usuarioServices1.getUsuario(username).getNombre()!=null){
+               System.out.println(usuarioServices1.getUsuario(username).getUsername() +"->"+ usuarioServices1.getUsuario(username).getPassword());
+               if(usuarioServices1.getUsuario(username).getUsername().equals(username) && usuarioServices1.getUsuario(username).getPassword().equals(password))
+                    response.redirect("/");
+           }
+           attributes.put("message", "Lo siento no tienes cuenta registrada solo un admin puede registrarte");
+            attributes.put("titulo", "login");
+
+            return new ModelAndView(attributes, "login.ftl");
         }, freeMarkerEngine);
 
         get("/registrar", (request, response) -> {
@@ -143,6 +172,19 @@ public class Main {
 
 
 //<--------------------------------------------------Articulo Crud------------------------------------------------------------------------------------------------------------------->
+        get("/agregar/articulo", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("titulo", "registrar articulo");
+            return new ModelAndView(model, "registrarArticulo.ftl");
+        },freeMarkerEngine);
+        before("/agregar/articulo", (request, response) -> {
+           Usuario usuario =request.session(true).attribute("usuario");
+           if(usuario==null){
+               response.redirect("/login");
+           }else{
+               response.redirect("/agregar/articulo");
+           }
+        });
 
         post("/agregar/articulo",(request, response)->{
             String cuerpo=request.queryParams("cuerpo");

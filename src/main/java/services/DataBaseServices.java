@@ -3,6 +3,8 @@ package services;
 /**
  * Created by john on 05/06/17.
  */
+import com.modelo.Usuario;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +22,7 @@ public class DataBaseServices {
      */
     private  DataBaseServices(){
         registrarDriver();
+
     }
 
     /**

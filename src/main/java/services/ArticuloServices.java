@@ -50,7 +50,7 @@ public class ArticuloServices {
 
     public Articulo getArticulo(Long articulo){
         UsuarioServices usuarioServices=new UsuarioServices();
-        Articulo articulo1= null;
+        Articulo articulo1= new Articulo();
         String query = "select * from articulo where id=?;";
 
         Connection connection = DataBaseServices.getInstancia().getConexion();
@@ -86,6 +86,7 @@ public class ArticuloServices {
         Connection connection= null;
         String query = "insert into articulo(titulo,cuerpo,autor,fecha)values(?,?,?,?);";
         try {
+            connection = DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,articulo.getTitulo());
             preparedStatement.setString(2,articulo.getCuerpo());
@@ -114,6 +115,7 @@ public class ArticuloServices {
         String query = "update articulo set id=?,titulo=?, cuerpo=?, autor=?, fecha=? WHERE id=?);";
 
         try {
+            connection = DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,articulo.getId());
             preparedStatement.setString(2,articulo.getTitulo());

@@ -55,7 +55,7 @@ public class ComentarioServices {
         UsuarioServices usuarioServices=new UsuarioServices();
         ArticuloServices articuloServices=new ArticuloServices();
 
-        Comentario comentario1= null;
+        Comentario comentario1= new Comentario();
         String query = "select * from comentario where id=?;";
 
         Connection connection = DataBaseServices.getInstancia().getConexion();
@@ -64,6 +64,7 @@ public class ComentarioServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,comentario);
             ResultSet resultSet = preparedStatement.executeQuery();
+            comentario1.setId(1);
             comentario1.setId( resultSet.getLong("ID"));
             comentario1.setComentario(resultSet.getString("comentario"));
             comentario1.setArticulo(articuloServices.getArticulo(resultSet.getLong("id")));
@@ -119,8 +120,8 @@ public class ComentarioServices {
         Connection connection= null;
         String query = "update comentario set id=?,comentario=?, articulo=?, autor=? WHERE id=?);";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,comentario.getId());
             preparedStatement.setString(2,comentario.getComentario());
             preparedStatement.setLong(3,comentario.getArticulo().getId());

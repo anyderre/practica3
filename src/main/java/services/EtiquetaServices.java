@@ -31,7 +31,8 @@ public class EtiquetaServices {
 
             PreparedStatement preparedStatement =connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet!=null){
+            connection = DataBaseServices.getInstancia().getConexion();
+            while (resultSet.next()){
                 Etiqueta etiqueta = new Etiqueta();
                 etiqueta.setEtiqueta(resultSet.getString("etiqueta"));
                 etiqueta.setId(resultSet.getLong("id"));
@@ -54,7 +55,7 @@ public class EtiquetaServices {
         return etiquetas;
     }
     public Etiqueta getEtiqueta(long id){
-        Etiqueta etiqueta = null;
+        Etiqueta etiqueta = new Etiqueta();
         String query = "select * from etiqueta where id=?;";
         ArticuloServices articuloServices = new ArticuloServices();
         Connection connection = DataBaseServices.getInstancia().getConexion();
@@ -63,7 +64,8 @@ public class EtiquetaServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet!=null) {
+            while (resultSet.next()) {
+                etiqueta.setId(1);
                 etiqueta.setId(resultSet.getLong("id"));
                 etiqueta.setArticulo(articuloServices.getArticulo(resultSet.getLong("articulo")));
                 etiqueta.setId(resultSet.getLong("id"));
@@ -88,6 +90,7 @@ public class EtiquetaServices {
         String query = "insert into etiqueta (etiqueta,articulo)values(?,?);";
 
         try {
+            connection = DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,etiqueta.getEtiqueta());
             preparedStatement.setLong(2,etiqueta.getArticulo().getId());
@@ -112,6 +115,7 @@ public class EtiquetaServices {
         Connection connection= null;
         String query = "update etiqueta set id=?,etiqueta=?, articulo=? WHERE id=?);";
         try {
+            connection = DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,etiqueta.getId());
             preparedStatement.setString(2,etiqueta.getEtiqueta());
