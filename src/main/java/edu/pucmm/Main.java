@@ -3,13 +3,17 @@ package edu.pucmm;
 import com.modelo.*;
 import com.sun.org.apache.regexp.internal.RE;
 import freemarker.template.Configuration;
+import services.ArticuloServices;
+import services.ComentarioServices;
+import services.EtiquetaServices;
+import services.UsuarioServices;
 import spark.ModelAndView;
 import spark.Session;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.Date;
 
 import static java.lang.Class.forName;
 import static spark.Spark.*;
@@ -96,10 +100,88 @@ public class Main {
             return "";
         });
 
-    }
+
+//<--------------------------------------------------Etiquetas crud------------------------------------------------------------------------------------------------------------------->
+      delete("/etiqueta/:articulo/borrar/:id",(request, response)->{
+          long id=0,articulo=0;
+          try{
+               id = Long.parseLong(request.params("id"));
+               articulo = Long.parseLong(request.params("articulo"));
+          }catch (Exception ex){
+              ex.printStackTrace();
+          }
+          EtiquetaServices etiquetaServices = new EtiquetaServices();
+          etiquetaServices.borrarEtiqueta(id);
+          response.redirect("/ver/articulo/"+articulo);
+          return "";
+    });
 
 
-    /**
+//<--------------------------------------------------Comentario crud------------------------------------------------------------------------------------------------------------------->
+
+        post("/agregar/comentario/:articulo", (request, response)->{
+            long articulo=0;
+            try{
+                articulo = Long.parseLong(request.params("articulo"));
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+            Session session = request.session(true);
+            Usuario usuario = session.attribute("usuario");
+
+            ArticuloServices  articuloServices = new ArticuloServices();
+
+            String comentario = request.queryParams("comentario");
+            ComentarioServices comentarioServices = new ComentarioServices();
+            comentarioServices.crearComentario(new Comentario(comentario,usuario,articuloServices.getArticulo(articulo)));
+
+            response.redirect("/ver/articulo/"+articulo);
+
+          return "";
+        });
+
+
+
+//<--------------------------------------------------Articulo Crud------------------------------------------------------------------------------------------------------------------->
+
+        post("/agregar/articulo",(request, response)->{
+            String cuerpo=request.queryParams("cuerpo");
+            String titulo = request.queryParams("titulo");
+            String []etiquetas=request.queryParams("etiquetas").split(",");
+            //String autor = request.queryParams("username");
+
+            Session session = request.session(true);
+            Usuario usuario = session.attribute("usuario");
+
+            ArticuloServices  articuloServices = new ArticuloServices();
+            long id=articuloServices.listarArticulos().size();
+
+            Articulo articulo = new Articulo();
+            articulo.setCuerpo(cuerpo);
+            articulo.setAutor(usuario);
+            articulo.setFecha(new Date());
+            articulo.setId(id+1);
+
+            articuloServices.crearArticulo(articulo);
+            if(etiquetas!=null){
+                EtiquetaServices etiquetaServices = null;
+
+                for(String et: etiquetas){
+                    etiquetaServices.crearEtiqueta(new Etiqueta(et,articulo));
+                }
+            }else{
+                System.out.println("Error al entrar las etiquetas");
+            }
+
+            response.redirect("/");
+            return "";
+        });
+
+
+
+
+
+    }  /**
      * Metodo para setear el puerto en Heroku
      * @return
      */

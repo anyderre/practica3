@@ -15,8 +15,7 @@ public class Articulo {
     private List<Comentario> comentarios;
     private List<Etiqueta> etiquetas;
 
-    public Articulo(long id, String titulo, String cuerpo, Usuario autor, Date fecha) {
-        this.id = id;
+    public Articulo(String titulo, String cuerpo, Usuario autor, Date fecha) {
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.autor = autor;

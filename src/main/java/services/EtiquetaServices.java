@@ -86,6 +86,7 @@ public class EtiquetaServices {
         boolean ok = false;
         Connection connection= null;
         String query = "insert into etiqueta (etiqueta,articulo)values(?,?);";
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,etiqueta.getEtiqueta());

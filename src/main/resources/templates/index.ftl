@@ -30,7 +30,7 @@
                 <p>
                     Etiqueta(s) <i class="fa fa-tags"></i>:
                     <#list articuloEtiqueta as etiqueta>
-                        <span>etiqueta</span>
+                        <span>etiqueta  <a class ="borrar" href="/etiqueta/${articulo.getId()}/borrar/${etiqueta.getId()}" style="background:red;color:white;text-decoration:none;display:none">X</a></span>
                     </#list>
                 </p>
             </div>
@@ -38,7 +38,7 @@
     </div>
     
 </div>
- <form action="/agregar/comentario/${articulo.getId()}">
+ <form action="/agregar/${articulo.getId()}/comentario/">
      <div class="row">
          <div class="col-md-offset-5 col-md-5">
             <div class=" form-group">        
@@ -53,11 +53,17 @@
          </div>
      </div>          
  </form>
- <#list>
+ </#list>
  </#if>
 </#macro>
 
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.borrar').click(function () {
+            $(this).fadeIn('slow',0.9)
+        });
+    });
+</script>
 <#include "footer.ftl">
 
 
