@@ -46,7 +46,6 @@
           </div>
       </div>
         <br>
-        <input readonly type="hidden" name="${username}" id="username">
     </form>
     </div>
    

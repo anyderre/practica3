@@ -28,7 +28,7 @@ public class UsuarioServices {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 Usuario usuario = new Usuario();
-
+                usuario.setId(resultSet.getLong("id"));
                 usuario.setAdministrador(resultSet.getBoolean("ADMINISTRADOR"));
                 usuario.setAutor(resultSet.getBoolean("AUTOR"));
                 usuario.setNombre(resultSet.getString("nombre"));
@@ -55,6 +55,7 @@ public class UsuarioServices {
             preparedStatement.setString(1,username);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                usuario.setId(resultSet.getLong("id"));
                 usuario.setUsername(resultSet.getString("username"));
                 usuario.setPassword(resultSet.getString("password"));
                 usuario.setNombre(resultSet.getString("nombre"));

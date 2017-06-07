@@ -41,16 +41,19 @@ public class Main {
 
             //Adding admin user
             UsuarioServices usuarioServices = new UsuarioServices();
-        usuarioServices.listarUsuarios();
+
 
                 Usuario insertar = new Usuario();
                 insertar.setAdministrador(true);
+                insertar.setId(1);
                 insertar.setAutor(true);
                 insertar.setNombre("Jhon Ridore");
                 insertar.setPassword("1234");
                 insertar.setUsername("anyderre");
-             if(usuarioServices.getUsuario("anyderre")==null){
+
+             if(usuarioServices.getUsuario(insertar.getUsername()).getNombre()==null){
                 usuarioServices.crearUsuario(insertar);
+
             }
 
 
@@ -91,10 +94,16 @@ public class Main {
             usuario.setPassword(password);
             UsuarioServices usuarioServices1 = new UsuarioServices();
 
+
            if(usuarioServices1.getUsuario(username).getNombre()!=null){
-               System.out.println(usuarioServices1.getUsuario(username).getUsername() +"->"+ usuarioServices1.getUsuario(username).getPassword());
-               if(usuarioServices1.getUsuario(username).getUsername().equals(username) && usuarioServices1.getUsuario(username).getPassword().equals(password))
-                    response.redirect("/");
+                 if(usuarioServices1.getUsuario(username).getUsername().equals(username) && usuarioServices1.getUsuario(username).getPassword().equals(password))
+                     usuario.setId(usuarioServices1.getUsuario(username).getId());
+                     usuario.setAutor(usuarioServices1.getUsuario(username).getAutor());
+                     usuario.setAdministrador(usuarioServices1.getUsuario(username).getAdministrador());
+                     usuario.setNombre(usuarioServices1.getUsuario(username).getNombre());
+                     session.attribute("usuario", usuario);
+                     response.redirect("/");
+
            }
            attributes.put("message", "Lo siento no tienes cuenta registrada solo un admin puede registrarte");
             attributes.put("titulo", "login");
@@ -174,16 +183,21 @@ public class Main {
 //<--------------------------------------------------Articulo Crud------------------------------------------------------------------------------------------------------------------->
         get("/agregar/articulo", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
+            Usuario usuario = request.session(true).attribute("usuario");
+
+
             model.put("titulo", "registrar articulo");
             return new ModelAndView(model, "registrarArticulo.ftl");
         },freeMarkerEngine);
+
+        //checking if user have a session
         before("/agregar/articulo", (request, response) -> {
-           Usuario usuario =request.session(true).attribute("usuario");
-           if(usuario==null){
-               response.redirect("/login");
-           }else{
-               response.redirect("/agregar/articulo");
-           }
+
+            Usuario usuario = request.session(true).attribute("usuario");
+
+                    if (usuario == null) {
+                        response.redirect("/login");
+                    }
         });
 
         post("/agregar/articulo",(request, response)->{

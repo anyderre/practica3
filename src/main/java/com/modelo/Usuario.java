@@ -4,6 +4,7 @@ package com.modelo;
  * Created by anyderre on 04/06/17.
  */
 public class Usuario {
+    private long id;
     private String username;
     private String password;
     private String nombre;
@@ -19,7 +20,18 @@ public class Usuario {
     }
     public Usuario(){
 
+
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
     public String getUsername() {
         return username;
     }
