@@ -57,6 +57,8 @@ public class Main {
             }
 
 
+
+
         //Indicando la carpeta por defecto que estaremos usando.
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
         configuration.setClassForTemplateLoading(Main.class, "/templates");
@@ -64,17 +66,23 @@ public class Main {
 
 
         get("/", (request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
+                    Map<String, Object> attributes = new HashMap<>();
 
-            ArticuloServices articuloServices = new ArticuloServices();
+                    ArticuloServices articuloServices = new ArticuloServices();
+                    ArrayList<Articulo> articulos = (ArrayList<Articulo>) articuloServices.listarArticulos();
+                    System.out.println(articulos.size());
 
-            if(articuloServices.listarArticulos()!=null) {
-                System.out.println(articuloServices.listarArticulos().get(0).getAutor());
-                attributes.put("articulos", articuloServices.listarArticulos());
-            }
-            attributes.put("titulo", "Welcome");
-            return new ModelAndView(attributes, "index.ftl");
+                    if (articulos.size() == 0) {
+                        response.redirect("/login");
+
+                    }
+
+                    attributes.put("titulo", "Welcome");
+                    attributes.put("article_list", articulos);
+           // attributes.put("articulos", articulos);
+            return new ModelAndView(attributes, "prueba.ftl");
         }, freeMarkerEngine);
+
 
 
         get("/login", (request, response) -> {
@@ -190,18 +198,16 @@ public class Main {
             return new ModelAndView(model, "registrarArticulo.ftl");
         },freeMarkerEngine);
 
-/*        //checking if user have a session
+        //checking if user have a session
         before("/agregar/articulo", (request, response) -> {
             Usuario usuario = request.session(true).attribute("usuario");
 
             if (usuario == null) {
                 response.redirect("/login");
             }
-        });*/
+        });
 
         post("/agregar/articulo",(request, response)->{
-            //String cuerpo=request.queryParams("cuerpo");
-           // String titulo = request.queryParams("titulo");
             String []etiquetas=request.queryParams("etiquetas").split(",");
             //String autor = request.queryParams("username");
             ArticuloServices articuloServices=new ArticuloServices();
@@ -212,8 +218,8 @@ public class Main {
             us.setPassword("4321");
             us.setAutor(true);
             us.setAdministrador(false);
-           // Usuario usuario = session.attribute("usuario");
-
+            Usuario usuario = session.attribute("usuario");
+            //System.out.println(usuario);
             Articulo articulo = new Articulo();
             articulo.setTitulo( request.queryParams("titulo"));
             articulo.setCuerpo(request.queryParams("cuerpo"));

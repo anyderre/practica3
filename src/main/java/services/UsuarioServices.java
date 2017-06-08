@@ -91,7 +91,8 @@ public class UsuarioServices {
             preparedStatement.setBoolean(5,usuario.getAutor());
             if (preparedStatement.executeUpdate()>0){
                 ok=true;
-            };
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(UsuarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{

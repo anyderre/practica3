@@ -3,7 +3,7 @@
 
 <#macro article_list articulos> <!-- Used to list article sin index site -->
 <#if articulos?size!=0>
-<#list articulos as articulo>
+<#list article_list as articulo>
 <div class="article-container">
     <div class="row">
         <div class="col-xs-12">

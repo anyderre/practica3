@@ -61,7 +61,7 @@ public class BootStrapServices {
                 "    ARTICULO bigint NOT NULL,\n" +
                 "    CONSTRAINT ETIQUETA_ARTICULO_ID_FK FOREIGN KEY (ARTICULO) REFERENCES ARTICULO (ID)  ON DELETE CASCADE\n" +
                 ");";
-      // String sql6= "CREATE UNIQUE INDEX ETIQUETA_ID_UINDEX ON ETIQUETA (ID)";
+        //String sql6= "CREATE UNIQUE INDEX ETIQUETA_ID_UINDEX ON ETIQUETA (ID)";
 
         String sql5 ="CREATE TABLE IF NOT EXISTS USUARIO\n" +
                 "(\n" +
