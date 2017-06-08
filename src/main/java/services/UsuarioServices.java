@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * Created by john on 05/06/17.
  */
 public class UsuarioServices {
+
     public List<Usuario> listarUsuarios(){
         List<Usuario> usuarios = new ArrayList<>();
         Connection connection = null;
@@ -77,11 +78,11 @@ public class UsuarioServices {
 
     public boolean crearUsuario(Usuario usuario){
         boolean ok = false;
-        Connection connection= null;
+        Connection connection= DataBaseServices.getInstancia().getConexion();
         String query = "insert into usuario (username,nombre, password, administrador, autor)values(?,?,?,?,?);";
 
         try {
-            connection= DataBaseServices.getInstancia().getConexion();
+
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,usuario.getUsername());
             preparedStatement.setString(2,usuario.getNombre());
@@ -104,6 +105,7 @@ public class UsuarioServices {
 
         return  ok;
     }
+
     public boolean actualizarUsuario(Usuario usuario){
         boolean ok = false;
         Connection connection= null;

@@ -27,7 +27,7 @@ public class ArticuloServices {
 
             PreparedStatement preparedStatement =connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet!=null){
+            while (resultSet.next()){
 
                 Articulo articulo=new Articulo();
                 articulo.setId(resultSet.getLong("id"));

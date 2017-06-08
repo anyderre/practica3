@@ -70,6 +70,7 @@ public class Main {
             ArticuloServices articuloServices = new ArticuloServices();
 
             if(articuloServices.listarArticulos()!=null) {
+                System.out.println(articuloServices.listarArticulos().get(0).getAutor());
                 attributes.put("articulos", articuloServices.listarArticulos());
             }
             attributes.put("titulo", "Welcome");
@@ -190,37 +191,40 @@ public class Main {
             return new ModelAndView(model, "registrarArticulo.ftl");
         },freeMarkerEngine);
 
-        //checking if user have a session
+/*        //checking if user have a session
         before("/agregar/articulo", (request, response) -> {
-
             Usuario usuario = request.session(true).attribute("usuario");
 
-                    if (usuario == null) {
-                        response.redirect("/login");
-                    }
-        });
+            if (usuario == null) {
+                response.redirect("/login");
+            }
+        });*/
 
         post("/agregar/articulo",(request, response)->{
             String cuerpo=request.queryParams("cuerpo");
             String titulo = request.queryParams("titulo");
             String []etiquetas=request.queryParams("etiquetas").split(",");
             //String autor = request.queryParams("username");
-
+            ArticuloServices articuloServices=new ArticuloServices();
             Session session = request.session(true);
             Usuario usuario = session.attribute("usuario");
 
-            ArticuloServices  articuloServices = new ArticuloServices();
-            long id=articuloServices.listarArticulos().size();
-
             Articulo articulo = new Articulo();
+            articulo.setTitulo(titulo);
             articulo.setCuerpo(cuerpo);
             articulo.setAutor(usuario);
             articulo.setFecha(new Date());
-            articulo.setId(id+1);
+
 
             articuloServices.crearArticulo(articulo);
-            if(etiquetas!=null){
-                EtiquetaServices etiquetaServices = null;
+
+            long id=articuloServices.listarArticulos().get(articuloServices.listarArticulos().size()-1).getId();
+            System.out.println(id);
+            //articulo.setId(id);
+
+
+            if(etiquetas.length!=0){
+                EtiquetaServices etiquetaServices = new EtiquetaServices();
 
                 for(String et: etiquetas){
                     etiquetaServices.crearEtiqueta(new Etiqueta(et,articulo));

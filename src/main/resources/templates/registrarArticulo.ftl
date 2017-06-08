@@ -13,7 +13,7 @@
           <div class="col-md-offset-4 col-md-5">              
         <div class="input-group input-group-md form-group">
             <span class="input-group-addon" id="sizing-addon1"><i class="	glyphicon glyphicon-tags"></i></span>
-            <input type="email" class="form-control" name="titulo" placeholder="Entre el titulo" id="nombre" aria-describedby="sizing-addon1" required>
+            <input type="text" class="form-control" name="titulo" placeholder="Entre el titulo" id="titulo" aria-describedby="sizing-addon1" required>
         </div> 
           </div> 
             

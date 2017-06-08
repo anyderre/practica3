@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-
 <#include "header.ftl">
-
-<html>
 <div class="container">
     <h1 class="well">Registrar Usuario</h1>
-    <div class="col-lg-12 well">
+    <div class="col-md-12">
         <div class="row">
             <form>
                 <div class="col-sm-12">
@@ -46,5 +42,4 @@
     </div>
 </div>
 <#include "footer.ftl">
-</html>
 
