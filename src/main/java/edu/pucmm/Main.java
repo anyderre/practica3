@@ -201,27 +201,33 @@ public class Main {
         });*/
 
         post("/agregar/articulo",(request, response)->{
-            String cuerpo=request.queryParams("cuerpo");
-            String titulo = request.queryParams("titulo");
+            //String cuerpo=request.queryParams("cuerpo");
+           // String titulo = request.queryParams("titulo");
             String []etiquetas=request.queryParams("etiquetas").split(",");
             //String autor = request.queryParams("username");
             ArticuloServices articuloServices=new ArticuloServices();
             Session session = request.session(true);
-            Usuario usuario = session.attribute("usuario");
+            Usuario us = new Usuario();//("john","4321","anyderre",false,true);
+            us.setNombre("John");
+            us.setUsername("amyderre");
+            us.setPassword("4321");
+            us.setAutor(true);
+            us.setAdministrador(false);
+           // Usuario usuario = session.attribute("usuario");
 
             Articulo articulo = new Articulo();
-            articulo.setTitulo(titulo);
-            articulo.setCuerpo(cuerpo);
-            articulo.setAutor(usuario);
+            articulo.setTitulo( request.queryParams("titulo"));
+            articulo.setCuerpo(request.queryParams("cuerpo"));
+
+            articulo.setAutor(us);
             articulo.setFecha(new Date());
+
 
 
             articuloServices.crearArticulo(articulo);
 
             long id=articuloServices.listarArticulos().get(articuloServices.listarArticulos().size()-1).getId();
             System.out.println(id);
-            //articulo.setId(id);
-
 
             if(etiquetas.length!=0){
                 EtiquetaServices etiquetaServices = new EtiquetaServices();
