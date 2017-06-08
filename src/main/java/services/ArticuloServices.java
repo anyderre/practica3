@@ -6,6 +6,7 @@ import com.modelo.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +32,7 @@ public class ArticuloServices {
 
                 Articulo articulo=new Articulo();
                 articulo.setId(resultSet.getLong("id"));
-                articulo.setAutor(usuarioServices.getUsuario(resultSet.getString("username")));
+                articulo.setAutor(usuarioServices.getUsuario(resultSet.getString("autor")));
                 articulo.setCuerpo(resultSet.getString("cuerpo"));
                 articulo.setTitulo(resultSet.getString("titulo"));
                 articulo.setFecha(resultSet.getDate("fecha"));
@@ -91,7 +92,8 @@ public class ArticuloServices {
             preparedStatement.setString(1,articulo.getTitulo());
             preparedStatement.setString(2,articulo.getCuerpo());
             preparedStatement.setString(3,articulo.getAutor().getUsername());
-            preparedStatement.setDate(4,(Date) articulo.getFecha());
+            java.sql.Date date = new java.sql.Date(articulo.getFecha().getTime());
+            preparedStatement.setDate(4, date);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;

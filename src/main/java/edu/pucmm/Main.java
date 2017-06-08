@@ -66,7 +66,6 @@ public class Main {
         get("/", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
-
             ArticuloServices articuloServices = new ArticuloServices();
 
             if(articuloServices.listarArticulos()!=null) {
@@ -209,7 +208,7 @@ public class Main {
             Session session = request.session(true);
             Usuario us = new Usuario();//("john","4321","anyderre",false,true);
             us.setNombre("John");
-            us.setUsername("amyderre");
+            us.setUsername("anyderre");
             us.setPassword("4321");
             us.setAutor(true);
             us.setAdministrador(false);
@@ -221,17 +220,16 @@ public class Main {
 
             articulo.setAutor(us);
             articulo.setFecha(new Date());
-
-
-
             articuloServices.crearArticulo(articulo);
 
-            long id=articuloServices.listarArticulos().get(articuloServices.listarArticulos().size()-1).getId();
-            System.out.println(id);
+            //getting the recent ID
+            ArticuloServices articuloServices1=new ArticuloServices();
+            List <Articulo>articulo1= articuloServices1.listarArticulos();
+            long id = articulo1.get(articulo1.size()-1).getId();
 
             if(etiquetas.length!=0){
                 EtiquetaServices etiquetaServices = new EtiquetaServices();
-
+                articulo.setId(id);
                 for(String et: etiquetas){
                     etiquetaServices.crearEtiqueta(new Etiqueta(et,articulo));
                 }
