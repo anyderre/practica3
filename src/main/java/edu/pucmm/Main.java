@@ -76,11 +76,23 @@ public class Main {
                         response.redirect("/login");
 
                     }
+                    EtiquetaServices etiquetaServices = new EtiquetaServices();
+                    ComentarioServices comentarioServices = new ComentarioServices();
+                    List<Etiqueta> etiquetas = null;
+                    List<Comentario>comentarios=null;
+                    List<Articulo> articulosTemp=new ArrayList<>();
+                    for(Articulo articulo: articulos){
+                        etiquetas= etiquetaServices.getAllEtiquetas(articulo.getId());
+                        comentarios= comentarioServices.listaEstudiantes(articulo.getId());
+                        articulo.setEtiquetas(etiquetas);
+                        articulo.setComentarios(comentarios);
+                        articulosTemp.add(articulo);
+                    }
 
                     attributes.put("titulo", "Welcome");
-                    attributes.put("article_list", articulos);
+                    attributes.put("articulos", articulosTemp);
            // attributes.put("articulos", articulos);
-            return new ModelAndView(attributes, "prueba.ftl");
+            return new ModelAndView(attributes, "index.ftl");
         }, freeMarkerEngine);
 
 

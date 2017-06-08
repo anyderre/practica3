@@ -15,24 +15,23 @@ import java.util.logging.Logger;
  */
 public class ComentarioServices {
 
-    public List<Comentario> listaEstudiantes() {
+
+    public List<Comentario> listaEstudiantes(long articulo) {
         List<Comentario> comentarios = new ArrayList<>();
         Connection con = null; //objeto conexion.
         try {
-
-            String query = "select * from comentario;";
-            String queryAutor="select * from Usuario where Usuario.username=?;";
+            String query = "select * from comentario where articulo=?;";
             con = DataBaseServices.getInstancia().getConexion(); //referencia a la conexion.
             UsuarioServices usuarioServices = new UsuarioServices();
             ArticuloServices articuloServices=new ArticuloServices();
             PreparedStatement prepareStatement = con.prepareStatement(query);
-            PreparedStatement preparedStatement2=con.prepareStatement(queryAutor);
+            prepareStatement.setLong(1,articulo);
             ResultSet rs = prepareStatement.executeQuery();
             while(rs.next()){
                 Comentario com = new Comentario();
                 com.setId( rs.getLong("ID"));
                 com.setComentario(rs.getString("comentario"));
-                com.setArticulo(articuloServices.getArticulo(rs.getLong("id")));
+                com.setArticulo(articuloServices.getArticulo(rs.getLong("articulo")));
                 com.setAutor(usuarioServices.getUsuario(rs.getString("username")));//Esperando la funcion de Pierre
                 comentarios.add(com);
             }

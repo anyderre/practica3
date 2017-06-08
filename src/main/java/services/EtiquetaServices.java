@@ -19,10 +19,12 @@ import java.util.logging.Logger;
 public class EtiquetaServices {
 
 
-    public List<Etiqueta> getAllEtiquetas(){
+
+
+    public List<Etiqueta> getAllEtiquetas(long articulo){
         List<Etiqueta> etiquetas = new ArrayList<>();
         Connection connection = null;
-        String query = "select * from etiqueta;";
+        String query = "select * from etiqueta WHERE articulo=?;";
 
         try {
 
@@ -30,8 +32,8 @@ public class EtiquetaServices {
             ArticuloServices articuloServices = new ArticuloServices();
 
             PreparedStatement preparedStatement =connection.prepareStatement(query);
+            preparedStatement.setLong(1,articulo);
             ResultSet resultSet = preparedStatement.executeQuery();
-            connection = DataBaseServices.getInstancia().getConexion();
             while (resultSet.next()){
                 Etiqueta etiqueta = new Etiqueta();
                 etiqueta.setEtiqueta(resultSet.getString("etiqueta"));
