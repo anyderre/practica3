@@ -214,14 +214,11 @@ public class Main {
             comentario1.setComentario(request.queryParams("comentario"));
             comentario1.setArticulo(articuloServices.getArticulo(articulo));
 
-            //String comentario = request.queryParams("comentario");
+
             ComentarioServices comentarioServices = new ComentarioServices();
-           // comentarioServices.crearComentario(new Comentario(comentario,usuario,articuloServices.getArticulo(articulo)));
             comentarioServices.crearComentario(comentario1);
 
-            //response.redirect("/ver/articulo/"+articulo);
             response.redirect("/ver/articulo/"+articulo);
-
 
           return "";
         });
