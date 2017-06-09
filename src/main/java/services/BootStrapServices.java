@@ -37,7 +37,7 @@ public class BootStrapServices {
         String sql2= "CREATE TABLE  IF NOT EXISTS ARTICULO\n"+
                 "(\n"+
                         "ID bigint AUTO_INCREMENT PRIMARY KEY,\n"+
-                        "TITULO varchar(100) NOT NULL,\n"+
+                        "TITULO varchar(400) NOT NULL,\n"+
                         "CUERPO CLOB,\n"+
                         "AUTOR varchar(40) NOT NULL,\n"+
                         "FECHA date,\n"+

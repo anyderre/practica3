@@ -16,9 +16,10 @@ import java.util.logging.Logger;
 public class ComentarioServices {
 
 
-    public List<Comentario> listaEstudiantes(long articulo) {
+    public List<Comentario> listarComentarios(long articulo) {
+
         List<Comentario> comentarios = new ArrayList<>();
-        Connection con = null; //objeto conexion.
+        Connection con = DataBaseServices.getInstancia().getConexion();
         try {
             String query = "select * from comentario where articulo=?;";
             con = DataBaseServices.getInstancia().getConexion(); //referencia a la conexion.
@@ -32,7 +33,7 @@ public class ComentarioServices {
                 com.setId( rs.getLong("ID"));
                 com.setComentario(rs.getString("comentario"));
                 com.setArticulo(articuloServices.getArticulo(rs.getLong("articulo")));
-                com.setAutor(usuarioServices.getUsuario(rs.getString("username")));//Esperando la funcion de Pierre
+                com.setAutor(usuarioServices.getUsuario(rs.getString("autor")));//Esperando la funcion de Pierre
                 comentarios.add(com);
             }
 
@@ -86,20 +87,20 @@ public class ComentarioServices {
 
     public boolean crearComentario(Comentario comentario){
 
-        UsuarioServices usuarioServices=new UsuarioServices();
+        //UsuarioServices usuarioServices=new UsuarioServices();
         boolean ok = false;
         Connection connection= null;
-        String query = "insert into comentario(comentario,articulo,autor)values(?,?,?);";
+        String query = "insert into comentario(comentario,articulo,autor)values(?,?,?)";
         try {
+            connection = DataBaseServices.getInstancia().getConexion();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-
             preparedStatement.setString(1,comentario.getComentario());
             preparedStatement.setLong(2,comentario.getArticulo().getId());
             preparedStatement.setString(3,comentario.getAutor().getUsername());
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;
-            };
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ComentarioServices.class.getName()).log(Level.SEVERE, null, ex);
         } finally{

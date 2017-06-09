@@ -68,7 +68,7 @@ public class Main {
 
                     ArticuloServices articuloServices = new ArticuloServices();
                     ArrayList<Articulo> articulos = (ArrayList<Articulo>) articuloServices.listarArticulos();
-                    System.out.println(articulos.size());
+
 
 
                     EtiquetaServices etiquetaServices = new EtiquetaServices();
@@ -78,7 +78,7 @@ public class Main {
                     List<Articulo> articulosTemp=new ArrayList<>();
                     for(Articulo articulo: articulos){
                         etiquetas= etiquetaServices.getAllEtiquetas(articulo.getId());
-                        comentarios= comentarioServices.listaEstudiantes(articulo.getId());
+                        comentarios= comentarioServices.listarComentarios(articulo.getId());
                         articulo.setEtiquetas(etiquetas);
                         articulo.setComentarios(comentarios);
                         articulosTemp.add(articulo);
@@ -121,7 +121,7 @@ public class Main {
            if(usuario1.getNombre()!=null){
 
                  if(usuario1.getUsername().equals(username) && usuario1.getPassword().equals(password)) {
-                     System.out.println(usuario1.getPassword() + " " + usuario1.getUsername());
+
                      usuario.setId(usuarioServices1.getUsuario(username).getId());
                      usuario.setAutor(usuarioServices1.getUsuario(username).getAutor());
                      usuario.setAdministrador(usuarioServices1.getUsuario(username).getAdministrador());
@@ -200,38 +200,38 @@ public class Main {
 //<--------------------------------------------------Comentario crud------------------------------------------------------------------------------------------------------------------->
 
         post("/agregar/comentario/:articulo", (request, response)->{
-            long articulo=0;
-            try{
-                articulo = Long.parseLong(request.params("articulo"));
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
+           // long articulo=0;
+
+            long articulo= Long.parseLong((request.params("articulo")));
+
             Session session = request.session(true);
             Usuario usuario = session.attribute("usuario");
+            System.out.println(usuario.getUsername());
 
             ArticuloServices  articuloServices = new ArticuloServices();
+            Comentario comentario1=new Comentario();
+            comentario1.setAutor(usuario);
+            comentario1.setComentario(request.queryParams("comentario"));
+            comentario1.setArticulo(articuloServices.getArticulo(articulo));
 
-            String comentario = request.queryParams("comentario");
+            //String comentario = request.queryParams("comentario");
             ComentarioServices comentarioServices = new ComentarioServices();
-            comentarioServices.crearComentario(new Comentario(comentario,usuario,articuloServices.getArticulo(articulo)));
+           // comentarioServices.crearComentario(new Comentario(comentario,usuario,articuloServices.getArticulo(articulo)));
+            comentarioServices.crearComentario(comentario1);
 
+            //response.redirect("/ver/articulo/"+articulo);
             response.redirect("/ver/articulo/"+articulo);
+
 
           return "";
         });
 
-//        before("/agregar/comentario/:articulo", (request, response) -> {
-//            Usuario usuario = request.session(true).attribute("usuario");
-//            Usuario us = new Usuario();//("john","4321","anyderre",false,true);
-//            us.setNombre("John");
-//            us.setUsername("anyderre");
-//            us.setPassword("4321");
-//            us.setAutor(true);
-//            us.setAdministrador(false);
-//            if (us == null) {
-//                response.redirect("/login");
-//            }
-//        });
+        before("/agregar/comentario/:articulo", (request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+            if (usuario == null) {
+                response.redirect("/login");
+            }
+        });
 
 //<--------------------------------------------------Articulo Crud------------------------------------------------------------------------------------------------------------------->
         get("/agregar/articulo", (request, response) -> {
@@ -294,14 +294,13 @@ public class Main {
             long id= (long)Integer.parseInt(request.params("id"));
             ArticuloServices articuloServices = new ArticuloServices();
             Articulo articulo = articuloServices.getArticulo(id);
-            System.out.println(id+" "+articulo.getId()+" "+articulo.getAutor());
             EtiquetaServices etiquetaServices = new EtiquetaServices();
             ComentarioServices comentarioServices = new ComentarioServices();
             List<Etiqueta> etiquetas = null;
             List<Comentario>comentarios=null;
 
             etiquetas= etiquetaServices.getAllEtiquetas(articulo.getId());
-            comentarios= comentarioServices.listaEstudiantes(articulo.getId());
+            comentarios= comentarioServices.listarComentarios(articulo.getId());
             articulo.setEtiquetas(etiquetas);
             articulo.setComentarios(comentarios);
 
