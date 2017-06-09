@@ -50,13 +50,14 @@
 
                </div>
            </div>
+       </div>
                 <div class="row">
                     <div class="col-md-offset-2 col-md-9">
                     <#assign comentarios = articulo.getComentarios()>
                     <#if comentarios?size!=0>
                         <#list comentarios as comentario>
                             <div>
-                                <p style="border:1px solid gray;">${comentario} <a class="borrar" href="/comentarios/borrar/${comentario.getId()}" style="background:red;color:white;text-decoration:none;display:none">X</a></p>
+                                <p style="border:1px solid lavender;">${comentario}</p>
                             </div>
 
                         </#list>
@@ -81,7 +82,7 @@
                  </div>          
              </form>
 
-       </div>
+
         
    </div>
 <#include "footer.ftl">

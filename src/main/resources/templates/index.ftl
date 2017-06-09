@@ -2,6 +2,7 @@
 <#include "nav.ftl">
 
 <!-- Used to list article sin index site -->
+
 <#if articulos??>
     <#if articulos?size!=0>
         <#list articulos as articulo>
@@ -70,9 +71,19 @@
             </div>
              <hr>
          </#list>
-     </#if>
+    <#else>
+         <#if noDatos??>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-12" style="color:darkgray">
+                        <h3>${noDatos}...<a href="/agregar/articulo" style="text-align: center">Agregar un articlo?
+                        </a></h3>
+                    </div>
+                </div>
+            </div>
+         </#if>
+    </#if>
 </#if>
-
 <script type="text/javascript">
     $(document).ready(function(){
         $(".menu").accordion({collapsible:true, active:false});

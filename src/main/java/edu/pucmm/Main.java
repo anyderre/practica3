@@ -70,10 +70,7 @@ public class Main {
                     ArrayList<Articulo> articulos = (ArrayList<Articulo>) articuloServices.listarArticulos();
                     System.out.println(articulos.size());
 
-                    if (articulos.size() == 0) {
-                        response.redirect("/login");
 
-                    }
                     EtiquetaServices etiquetaServices = new EtiquetaServices();
                     ComentarioServices comentarioServices = new ComentarioServices();
                     List<Etiqueta> etiquetas = null;
@@ -88,9 +85,15 @@ public class Main {
                     }
                     //inversing ArrayList order
                     Collections.reverse(articulosTemp);
-                    attributes.put("titulo", "Welcome");
                     attributes.put("articulos", articulosTemp);
 
+            if (articulos.size()==0) {
+                attributes.put("noDatos", "Todavia no hay Articulos en la base de datos");
+
+            };
+            System.out.println(articulos.size());
+
+            attributes.put("titulo", "Welcome");
            // attributes.put("articulos", articulos);
             return new ModelAndView(attributes, "index.ftl");
         }, freeMarkerEngine);
