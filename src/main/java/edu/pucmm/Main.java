@@ -114,16 +114,18 @@ public class Main {
             usuario.setPassword(password);
             UsuarioServices usuarioServices1 = new UsuarioServices();
 
+            Usuario usuario1 = usuarioServices1.getUsuario(username);
+           if(usuario1.getNombre()!=null){
 
-           if(usuarioServices1.getUsuario(username).getNombre()!=null){
-                 if(usuarioServices1.getUsuario(username).getUsername().equals(username) && usuarioServices1.getUsuario(username).getPassword().equals(password))
+                 if(usuario1.getUsername().equals(username) && usuario1.getPassword().equals(password)) {
+                     System.out.println(usuario1.getPassword() + " " + usuario1.getUsername());
                      usuario.setId(usuarioServices1.getUsuario(username).getId());
                      usuario.setAutor(usuarioServices1.getUsuario(username).getAutor());
                      usuario.setAdministrador(usuarioServices1.getUsuario(username).getAdministrador());
                      usuario.setNombre(usuarioServices1.getUsuario(username).getNombre());
                      session.attribute("usuario", usuario);
                      response.redirect("/");
-
+                 }
            }
            attributes.put("message", "Lo siento no tienes cuenta registrada solo un admin puede registrarte");
             attributes.put("titulo", "login");
@@ -198,7 +200,18 @@ public class Main {
           return "";
         });
 
-
+//        before("/agregar/comentario/:articulo", (request, response) -> {
+//            Usuario usuario = request.session(true).attribute("usuario");
+//            Usuario us = new Usuario();//("john","4321","anyderre",false,true);
+//            us.setNombre("John");
+//            us.setUsername("anyderre");
+//            us.setPassword("4321");
+//            us.setAutor(true);
+//            us.setAdministrador(false);
+//            if (us == null) {
+//                response.redirect("/login");
+//            }
+//        });
 
 //<--------------------------------------------------Articulo Crud------------------------------------------------------------------------------------------------------------------->
         get("/agregar/articulo", (request, response) -> {
@@ -224,19 +237,14 @@ public class Main {
             //String autor = request.queryParams("username");
             ArticuloServices articuloServices=new ArticuloServices();
             Session session = request.session(true);
-            Usuario us = new Usuario();//("john","4321","anyderre",false,true);
-            us.setNombre("John");
-            us.setUsername("anyderre");
-            us.setPassword("4321");
-            us.setAutor(true);
-            us.setAdministrador(false);
+
             Usuario usuario = session.attribute("usuario");
             //System.out.println(usuario);
             Articulo articulo = new Articulo();
             articulo.setTitulo( request.queryParams("titulo"));
             articulo.setCuerpo(request.queryParams("cuerpo"));
 
-            articulo.setAutor(us);
+            articulo.setAutor(usuario);
             articulo.setFecha(new Date());
             articuloServices.crearArticulo(articulo);
 
@@ -259,6 +267,32 @@ public class Main {
             return "";
         });
 
+
+        get("/ver/articulo/:id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            Usuario usuario = request.session(true).attribute("usuario");
+
+            long id= (long)Integer.parseInt(request.params("id"));
+            ArticuloServices articuloServices = new ArticuloServices();
+            Articulo articulo = articuloServices.getArticulo(id);
+            System.out.println(id+" "+articulo.getId()+" "+articulo.getAutor());
+            EtiquetaServices etiquetaServices = new EtiquetaServices();
+            ComentarioServices comentarioServices = new ComentarioServices();
+            List<Etiqueta> etiquetas = null;
+            List<Comentario>comentarios=null;
+
+            etiquetas= etiquetaServices.getAllEtiquetas(articulo.getId());
+            comentarios= comentarioServices.listaEstudiantes(articulo.getId());
+            articulo.setEtiquetas(etiquetas);
+            articulo.setComentarios(comentarios);
+
+
+            model.put("titulo", "Welcome");
+            model.put("articulo", articulo);
+
+            model.put("titulo", "Ver articulo");
+            return new ModelAndView(model, "verArticulo.ftl");
+        },freeMarkerEngine);
 
 
 

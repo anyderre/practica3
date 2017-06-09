@@ -109,11 +109,8 @@ a:hover { text-decoration: none }
 }
 
 
-
-
-
-
-.w3-container{
+.article-container{
     margin-left: 20%;
-    margin-right: 20%;
+    margin-right: 35%;
+    background-color: #dff0d8;
 }

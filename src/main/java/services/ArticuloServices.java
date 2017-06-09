@@ -60,11 +60,14 @@ public class ArticuloServices {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1,articulo);
             ResultSet resultSet = preparedStatement.executeQuery();
-            articulo1.setId(resultSet.getLong("id"));
-            articulo1.setAutor(usuarioServices.getUsuario(resultSet.getString("username")));
-            articulo1.setCuerpo(resultSet.getString("cuerpo"));
-            articulo1.setTitulo(resultSet.getString("titulo"));
-            articulo1.setFecha(resultSet.getDate("fecha"));
+            while (resultSet.next()){
+                articulo1.setId(resultSet.getLong("id"));
+                articulo1.setAutor(usuarioServices.getUsuario(resultSet.getString("autor")));
+                articulo1.setCuerpo(resultSet.getString("cuerpo"));
+                articulo1.setTitulo(resultSet.getString("titulo"));
+                articulo1.setFecha(resultSet.getDate("fecha"));
+            }
+
 
 
         } catch (SQLException ex) {
