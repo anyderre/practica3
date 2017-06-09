@@ -3,6 +3,21 @@
 <div class="container">
     <div class="article-container">
         <div class="row">
+            <div class="col-md-12">
+                <div class="menu">
+                    <h3>Options</h3>
+                    <div>
+                        <p >
+                            <a class="links" href="/borrar/articulo/${articulo.getId()}">Borrar</a><br>
+                            <a class="links" href="/agregar/articulo">Agregar</a><br>
+                            <a class="links" href="/modificar/articulo/${articulo.getId()}">Modificar</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-offset-2 col-md-9">
                 <div class="col-md-12" style="background-color: burlywood">
                     <h3 class="article-title">
@@ -89,4 +104,9 @@
     </div>
 
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".menu").accordion({collapsible:true, active:false});
+    });
+</script>
 <#include "footer.ftl">

@@ -255,6 +255,8 @@ public class Main {
             Session session = request.session(true);
 
             Usuario usuario = session.attribute("usuario");
+
+
             //System.out.println(usuario);
             Articulo articulo = new Articulo();
             articulo.setTitulo( request.queryParams("titulo"));
@@ -262,6 +264,7 @@ public class Main {
 
             articulo.setAutor(usuario);
             articulo.setFecha(new Date());
+
             articuloServices.crearArticulo(articulo);
 
             //getting the recent ID
@@ -365,7 +368,7 @@ public class Main {
             System.out.println("there");
             articuloServices.actualizarArticulos(articulo);
 
-            response.redirect("/");
+            response.redirect("/ver/articulo/"+id);
             return "";
         });
 

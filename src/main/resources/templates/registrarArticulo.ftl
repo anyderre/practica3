@@ -46,6 +46,9 @@
           </div>
       </div>
         <br>
+    <#if error??>
+        <p style="color:red;font-weight: bold">${error}</p>
+    </#if>
     </form>
     </div>
    
