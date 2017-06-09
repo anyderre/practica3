@@ -141,16 +141,16 @@ public class EtiquetaServices {
 
         return  ok;
     }
-    public boolean borrarEtiqueta(long id){
+    public boolean borrarEtiqueta(long articulo){
         boolean ok = false;
 
         Connection connection = null;
-        String query = "delete from etiqueta where id=?;";
+        String query = "delete from etiqueta where articulo=?;";
         connection = DataBaseServices.getInstancia().getConexion();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             //resolving where
-            preparedStatement.setLong(1,id);
+            preparedStatement.setLong(1,articulo);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;

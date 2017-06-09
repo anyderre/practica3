@@ -8,6 +8,21 @@
             <div class="article-container">
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="menu">
+                            <h3>Options</h3>
+                            <div>
+                                <p >
+                                    <a class="links" href="/borrar/articulo/${articulo.getId()}">Borrar</a><br>
+                                    <a class="links" href="/agregar/articulo">Agregar</a><br>
+                                    <a class="links" href="/modificar/articulo/${articulo.getId()}">Modificar</a>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                    <div class="col-md-12">
                           <div class="col-md-12" style="background-color: burlywood">
                               <a href="/ver/articulo/${articulo.getId()}" style="text-align: center">
                                   <h3 class="article-title">${articulo.getTitulo()}</h3>
@@ -60,9 +75,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('.borrar').click(function () {
-            $(this).fadeIn('slow',0.9)
-        });
+        $(".menu").accordion({collapsible:true, active:false});
     });
 </script>
 <#include "footer.ftl">

@@ -1,6 +1,7 @@
 package services;
 
 import com.modelo.Articulo;
+import com.modelo.Etiqueta;
 import com.modelo.Usuario;
 
 import java.sql.*;
@@ -117,7 +118,7 @@ public class ArticuloServices {
     public boolean actualizarArticulos(Articulo articulo){
         boolean ok = false;
         Connection connection= null;
-        String query = "update articulo set id=?,titulo=?, cuerpo=?, autor=?, fecha=? WHERE id=?);";
+        String query = "update articulo set id=?,titulo=?, cuerpo=?, autor=?, fecha=? WHERE id=?;";
 
         try {
             connection = DataBaseServices.getInstancia().getConexion();
@@ -126,7 +127,9 @@ public class ArticuloServices {
             preparedStatement.setString(2,articulo.getTitulo());
             preparedStatement.setString(3,articulo.getCuerpo());
             preparedStatement.setString(4,articulo.getAutor().getUsername());
-            preparedStatement.setDate(5,(Date) articulo.getFecha());
+            java.sql.Date date = new java.sql.Date(articulo.getFecha().getTime());
+            preparedStatement.setDate(5, date);
+
             //resolving where
             preparedStatement.setLong(6,articulo.getId());
 
@@ -147,16 +150,16 @@ public class ArticuloServices {
     }
 
 
-    public boolean borrarArticulo(Articulo articulo){
+    public boolean borrarArticulo(long articulo){
         boolean ok = false;
 
         Connection connection = null;
-        String query = "delete from articulo where username=?;";
+        String query = "delete from articulo where id=?;";
         connection = DataBaseServices.getInstancia().getConexion();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             //resolving where
-            preparedStatement.setLong(1,articulo.getId());
+            preparedStatement.setLong(1,articulo);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;

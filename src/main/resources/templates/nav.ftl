@@ -8,19 +8,19 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Brand</a>
+            <a class="navbar-brand" href="/">Blog-Dany & Jhon</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Articulo <span class="caret"></span></a>
+                    <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Articulo <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/agregar/articulo">Crear Articulo</a></li>
-                        <li><a href="/">Listar Articulo</a></li>
-                        <li><a href="#">Buscar Articulo</a></li>
+                        <#--<li><a href="/">Listar Articulo</a></li>-->
+                        <#--<li><a href="#">Buscar Articulo</a></li>-->
                     </ul>
                 </li>
             </ul>
@@ -31,11 +31,11 @@
                 <button type="submit" class="btn btn-default">Search</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Login</a></li>
+                <li><a href="/login">Login</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuario <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Agregar Usuario</a></li>
+                        <li><a href="/registrar">Agregar Usuario</a></li>
                         <li><a href="#">Borrar Usuario</a></li>
                     </ul>
                 </li>

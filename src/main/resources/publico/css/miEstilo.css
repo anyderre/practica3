@@ -114,3 +114,11 @@ a:hover { text-decoration: none }
     margin-right: 35%;
     background-color: #dff0d8;
 }
+.links{
+    font-weight: bold;
+    font-size: 18px;
+        
+}
+.links:hover{
+    cursor: pointer;
+}

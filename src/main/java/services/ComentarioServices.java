@@ -146,16 +146,16 @@ public class ComentarioServices {
     }
 
 
-    public boolean borrarComentario(Comentario comentario){
+    public boolean borrarComentario(long articulo){
         boolean ok = false;
 
         Connection connection = null;
-        String query = "delete from comentario where id=?;";
+        String query = "delete from comentario where articulo=?;";
         connection = DataBaseServices.getInstancia().getConexion();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             //resolving where
-            preparedStatement.setLong(1,comentario.getId());
+            preparedStatement.setLong(1,articulo);
 
             if (preparedStatement.executeUpdate()>0){
                 ok=true;

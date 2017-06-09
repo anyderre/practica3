@@ -57,8 +57,6 @@ public class Main {
             }
 
 
-
-
         //Indicando la carpeta por defecto que estaremos usando.
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
         configuration.setClassForTemplateLoading(Main.class, "/templates");
@@ -88,9 +86,11 @@ public class Main {
                         articulo.setComentarios(comentarios);
                         articulosTemp.add(articulo);
                     }
-
+                    //inversing ArrayList order
+                    Collections.reverse(articulosTemp);
                     attributes.put("titulo", "Welcome");
                     attributes.put("articulos", articulosTemp);
+
            // attributes.put("articulos", articulos);
             return new ModelAndView(attributes, "index.ftl");
         }, freeMarkerEngine);
@@ -133,32 +133,49 @@ public class Main {
             return new ModelAndView(attributes, "login.ftl");
         }, freeMarkerEngine);
 
+
+ //------------------------------------------//Admin task------------------------------------------------------------
+        before("/registrar", (request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+
+            if (usuario == null) {
+                response.redirect("/login");
+            }
+
+        });
         get("/registrar", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
             attributes.put("titulo", "Registrar");
-            return new ModelAndView(attributes, "index.ftl");
+            return new ModelAndView(attributes, "registrar.ftl");
         }, freeMarkerEngine);
 
 
-        post("/registrar", (request, response) -> {
+        post("/registrar/usuario", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            //Usuario currentUserLogin = new Usuario();
-            Usuario usuario=null;
-            ConnectionDB connectionDB = new ConnectionDB();
-            Connection connection= connectionDB.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * FROM USUARIO");
-            if(resultSet==null){
-               usuario = new Usuario(request.queryParams("username"), request.queryParams("password"), request.queryParams("nombre"),true, true);
-            }else{
-                usuario = new Usuario(request.queryParams("username"), request.queryParams("password"), request.queryParams("nombre"),false, true);
-            }
-            request.session(true).attribute("usuario", usuario);
 
-            response.redirect("/");
-            return "";
-        });
+            if(request.queryParams("password").matches(request.queryParams("password-confirm"))){
+                Usuario usuario = request.session(true).attribute("usuario");
+                System.out.println(usuario.getAdministrador());
+                if(usuario.getAdministrador()){
+                    Usuario newUsuario = new Usuario();
+                    newUsuario.setNombre(request.queryParams("nombre"));
+                    newUsuario.setAdministrador(false);
+                    newUsuario.setAutor(true);
+                    newUsuario.setPassword(request.queryParams("password"));
+                    newUsuario.setUsername(request.queryParams("username"));
+                    UsuarioServices usuarioServices1 = new UsuarioServices();
+                    usuarioServices1.crearUsuario(newUsuario);
+                    response.redirect("/");
+                }else{
+                    attributes.put("message", "Solo administrador puede crear usario");
+                }
+            }else{
+                attributes.put("confirm", "password doesn't match");
+            }
+            attributes.put("titulo", "Registrar");
+            return new ModelAndView(attributes,"registrar.ftl");
+        },freeMarkerEngine);
 
 
 //<--------------------------------------------------Etiquetas crud------------------------------------------------------------------------------------------------------------------->
@@ -217,7 +234,6 @@ public class Main {
         get("/agregar/articulo", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             Usuario usuario = request.session(true).attribute("usuario");
-
 
             model.put("titulo", "registrar articulo");
             return new ModelAndView(model, "registrarArticulo.ftl");
@@ -294,8 +310,90 @@ public class Main {
             return new ModelAndView(model, "verArticulo.ftl");
         },freeMarkerEngine);
 
+//------------------------modifying articulo---------------------------
+        get("/modificar/articulo/:id", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            Usuario usuario = request.session(true).attribute("usuario");
+            ArticuloServices articuloServices = new ArticuloServices();
+            Articulo articulo = articuloServices.getArticulo(Long.parseLong(request.params("id")));
+            EtiquetaServices etiquetaServices = new EtiquetaServices();
+            List<Etiqueta> etiquetas =etiquetaServices.getAllEtiquetas(Long.parseLong(request.params("id")));
 
+            model.put("articulo",articulo);
+            model.put("etiquetas",etiquetas);
+            model.put("titulo", "registrar articulo");
+            return new ModelAndView(model, "modificarArticulo.ftl");
+        },freeMarkerEngine);
 
+        //checking if user have a session
+        before("/modificar/articulo/:id", (request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+            if (usuario == null) {
+                response.redirect("/login");
+            }
+        });
+
+        post("/modificar/:id/articulo",(request, response)->{
+            Long id = Long.parseLong(request.params("id"));
+            String []etiquetas=request.queryParams("etiquetas").split(",");
+            //String autor = request.queryParams("username");
+            ArticuloServices articuloServices=new ArticuloServices();
+            Session session = request.session(true);
+
+            Usuario usuario = session.attribute("usuario");
+            //System.out.println(usuario);
+            Articulo articulo = new Articulo();
+            articulo.setTitulo( request.queryParams("titulo"));
+            articulo.setCuerpo(request.queryParams("cuerpo"));
+
+            articulo.setAutor(usuario);
+            articulo.setFecha(new Date());
+            articulo.setId(id);
+            System.out.println();
+            if(etiquetas.length!=0){
+                EtiquetaServices etiquetaServices = new EtiquetaServices();
+
+                List<Etiqueta>etiquetas1 = etiquetaServices.getAllEtiquetas(id);
+                int count =0;
+                for(String et: etiquetas){
+                    if(!etiquetas1.get(0).getEtiqueta().equals(et))
+                        etiquetaServices.crearEtiqueta(new Etiqueta(et,articulo));
+                    count+=1;
+                }
+            }else{
+                System.out.println("Error al entrar las etiquetas");
+            }
+            System.out.println("there");
+            articuloServices.actualizarArticulos(articulo);
+
+            response.redirect("/");
+            return "";
+        });
+
+        before("/borrar/articulo/:articulo", (request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+            if (usuario == null) {
+                response.redirect("/login");
+            }
+        });
+
+        get("/borrar/articulo/:articulo",(request, response)->{
+            long articulo=0;
+            try{
+                articulo = Long.parseLong(request.params("articulo"));
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+            EtiquetaServices etiquetaServices = new EtiquetaServices();
+            ComentarioServices comentarioServices = new ComentarioServices();
+            ArticuloServices articuloServices = new ArticuloServices();
+
+            etiquetaServices.borrarEtiqueta(articulo);
+            comentarioServices.borrarComentario(articulo);
+            articuloServices.borrarArticulo(articulo);
+            response.redirect("/");
+            return "";
+        });
 
     }  /**
      * Metodo para setear el puerto en Heroku
